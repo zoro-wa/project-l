@@ -12,6 +12,7 @@ def display_score():
 
 
 def obstacle_movement(obstacle_list):
+
     if obstacle_list:
         for obstacle_rect in obstacle_list:
             obstacle_rect.x -= 5
@@ -27,6 +28,13 @@ def obstacle_movement(obstacle_list):
         return obstacle_list
     else:
         return []
+
+def collisions(player,obstacles):
+    if obstacles:
+        for obstacle_rect in obstacles:
+            if player.colliderect(obstacle_rect):
+                return False
+    return True
 
 
 pygame.init()
@@ -125,10 +133,16 @@ while True:
 
         # obstacle movement
         obstacle_rect_list = obstacle_movement(obstacle_rect_list)
+        
+        #collision
+        game_active = collisions(player_rect,obstacle_rect_list)
 
     else:
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
+        obstacle_rect_list.clear()
+        player_rect.midbottom = (80,300)
+        player_gravity = 0
 
         score_message = test_font.render(f"Your Score:{score}", False, (111, 196, 169))
         score_message_rect = score_message.get_rect(center=(400, 330))
